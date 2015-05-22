@@ -1,0 +1,19 @@
+{
+    "camelcase": true,
+    "curly": true,
+    "devel": true,
+    "eqeqeq": true,
+    "eqnull": true,
+    "esnext": true,
+    "expr": true,
+    "immed": true,
+    "latedef": true,
+    "newcap": true,
+    "noarg": true,
+    "trailing": true,
+    "undef": true,
+    "unused": true,
+
+    "browser": true,
+    "node": true
+}

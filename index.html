@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Retro Mirror</title>
+
+        <script src="retro-mirror.js"></script>
+        <script>
+            window.addEventListener('load', function() {
+                var retroMirror = new RetroMirror('retro-mirror');
+                var pixelSizeInput = document.querySelector('input[name=pixel-size]');
+                var pixelSizeOutput = document.querySelector('output[name=pixel-size]');
+                var paletteSelect = document.querySelector('select[name=palette]');
+
+                pixelSizeInput.value = retroMirror.pixelSize;
+                pixelSizeOutput.value = pixelSizeInput.value;
+                pixelSizeInput.addEventListener('input', function() {
+                    retroMirror.pixelSize = this.value;
+                    pixelSizeOutput.value = this.value;
+                });
+
+                paletteSelect.value = retroMirror.palette;
+                paletteSelect.addEventListener('change', function() {
+                    retroMirror.palette = this.value;
+                });
+            });
+        </script>
+
+        <style>
+            body {
+                color: #e9e8e8;
+                background-color: #1c1614;
+                padding: 0;
+                margin: 0;
+                text-align: center;
+            }
+
+            canvas {
+                width: 640px;
+                height: 480px;
+                background-color: #55514f;
+            }
+        </style>
+    </head>
+
+    <body>
+        <canvas id="retro-mirror"></canvas>
+
+        <div class="controls">
+            <div class="control-group">
+                <input name="pixel-size" type="range" min="1" max="12"></input>
+                <output name="pixel-size"></output>
+            </div>
+
+            <div class="control-group">
+                <select name="palette">
+                    <option value="none">None</option>
+                    <option value="grayscale">Grayscale</option>
+                    <option value="game-boy-light">Game Boy (Light)</option>
+                    <option value="game-boy-dark">Game Boy (Dark)</option>
+                    <option value="nes">NES</option>
+                    <option value="teletext">Teletext</option>
+                </select>
+            </div>
+        </div>
+    </body>
+</html>
