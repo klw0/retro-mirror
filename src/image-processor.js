@@ -1,5 +1,7 @@
-// TODO: rename me
-class ImageData {
+/**
+ * Manipulates image data objects.
+ */
+class ImageProcessor {
     constructor(imageData) {
         this._imageData = imageData;
     }
@@ -38,4 +40,4 @@ class ImageData {
     }
 }
 
-module.exports = ImageData;
+module.exports = ImageProcessor;

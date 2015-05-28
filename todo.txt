@@ -1,4 +1,3 @@
 - defaults instead of defaultOptions
-- ES6 imports
 - destructure assignment from defaults to instance vars?
-- new name for ImageData
+- ES6 imports
