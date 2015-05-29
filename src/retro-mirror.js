@@ -1,22 +1,15 @@
-require('babel/register');
-var imageHelper = require('./helpers/image');
+import 'babel/register';
+import * as imageHelper from './helpers/image';
+import * as palettes from './palettes/palettes';
 
 const defaultOptions = {
     width: 640,
     height: 480,
     pixelSize: 4,
     palette: 'none',
-    supportedPalettes: {
-        'none': null,
-        'grayscale': require('./palettes/grayscale'),
-        'game-boy-light': require('./palettes/game-boy-light'),
-        'game-boy-dark': require('./palettes/game-boy-dark'),
-        'nes': require('./palettes/nes'),
-        'teletext': require('./palettes/teletext'),
-    }
 };
 
-class RetroMirror {
+export default class RetroMirror {
     constructor(canvasId) {
         this.options = defaultOptions;
         this.canvas = document.getElementById(canvasId);
@@ -36,7 +29,6 @@ class RetroMirror {
 
         // Disable canvas smoothing so we can pixelate when scaling up.
         this.ctx.imageSmoothingEnabled = false;
-        this.ctx.webkitImageSmoothingEnabled = false;
         this.ctx.mozImageSmoothingEnabled = false;
         this.ctx.msImageSmoothingEnabled = false;
 
@@ -95,8 +87,6 @@ class RetroMirror {
     }
 
     set palette(palette) {
-        this.options.palette = this.options.supportedPalettes[palette];
+        this.options.palette = palettes[palette];
     }
 }
-
-module.exports = RetroMirror;

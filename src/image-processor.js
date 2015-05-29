@@ -1,7 +1,7 @@
 /**
  * Manipulates image data objects.
  */
-class ImageProcessor {
+export default class ImageProcessor {
     constructor(imageData) {
         this._imageData = imageData;
     }
@@ -39,5 +39,3 @@ class ImageProcessor {
         return x * 4 + y * this._imageData.width * 4;
     }
 }
-
-module.exports = ImageProcessor;
