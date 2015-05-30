@@ -2,7 +2,7 @@ import 'babel/register';
 import * as imageHelper from './helpers/image';
 import * as palettes from './palettes/palettes';
 
-const defaultOptions = {
+const defaults = {
     width: 640,
     height: 480,
     pixelSize: 4,
@@ -11,7 +11,9 @@ const defaultOptions = {
 
 export default class RetroMirror {
     constructor(canvasId) {
-        this.options = defaultOptions;
+        this._pixelSize = defaults.pixelSize;
+        this._palette = defaults.palette;
+
         this.canvas = document.getElementById(canvasId);
         this.buffer = null;
         this.ctx = null;
@@ -23,8 +25,8 @@ export default class RetroMirror {
             return;
         }
 
-        this.canvas.width = this.options.width;
-        this.canvas.height = this.options.height;
+        this.canvas.width = defaults.width;
+        this.canvas.height = defaults.height;
         this.ctx = this.canvas.getContext('2d');
 
         // Disable canvas smoothing so we can pixelate when scaling up.
@@ -36,7 +38,7 @@ export default class RetroMirror {
         this.bctx = this.buffer.getContext('2d');
 
         // Setting pixelSize updates the size of the buffer.
-        this.pixelSize = this.options.pixelSize;
+        this.pixelSize = defaults.pixelSize;
 
         navigator.getUserMedia = navigator.getUserMedia ||
                 navigator.webkitGetUserMedia ||
@@ -60,8 +62,8 @@ export default class RetroMirror {
         this.bctx.drawImage(this.video, 0, 0, this.buffer.width, this.buffer.height);
         var imageData = this.bctx.getImageData(0, 0, this.buffer.width, this.buffer.height);
 
-        if (this.options.palette && this.options.palette !== 'none') {
-            imageData = imageHelper.quantize(imageData, this.options.palette);
+        if (this.palette !== 'none') {
+            imageData = imageHelper.quantize(imageData, this.palette);
         }
 
         this.bctx.putImageData(imageData, 0, 0);
@@ -71,22 +73,36 @@ export default class RetroMirror {
         window.requestAnimationFrame(this.loop.bind(this));
     }
 
+    /**
+     * Gets the current pixel size.
+     */
     get pixelSize() {
-        return this.options.pixelSize;
+        return this._pixelSize;
     }
 
+    /**
+     * Sets the current pixel size.
+     */
     set pixelSize(pixelSize) {
-        this.options.pixelSize = Math.max(pixelSize, 1);
+        this._pixelSize = Math.max(pixelSize, 1);
 
+        // Adjust the size of the buffer so that it scales to the canvas size,
+        // which gives us the desired pixel size (since smoothing is off).
         this.buffer.width = this.canvas.width / pixelSize;
         this.buffer.height = this.canvas.height / pixelSize;
     }
 
+    /**
+     * Gets the current color palette.
+     */
     get palette() {
-        return this.options.palette;
+        return this._palette;
     }
 
+    /**
+     * Sets the current color palette.
+     */
     set palette(palette) {
-        this.options.palette = palettes[palette];
+        this._palette = palettes[palette] || defaults.palette;
     }
 }
