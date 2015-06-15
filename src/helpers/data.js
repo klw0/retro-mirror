@@ -2,8 +2,8 @@
  * Converts a base64 encoded string to a byte array (Uint8Array).
  */
 export function base64ToByteArray(base64) {
-    var decodedData = atob(base64);
-    var byteArray = new Uint8Array(decodedData.length);
+    let decodedData = atob(base64);
+    let byteArray = new Uint8Array(decodedData.length);
 
     for (let i = 0; i < decodedData.length; i++) {
         byteArray[i] = decodedData.charCodeAt(i);
@@ -16,7 +16,7 @@ export function base64ToByteArray(base64) {
  * Converts a byte array (Uint8Array) to a base64 encoded string.
  */
 export function byteArrayToBase64(byteArray) {
-    var encodedData = '';
+    let encodedData = '';
 
     for (let charCode of byteArray) {
         encodedData += String.fromCharCode(charCode);

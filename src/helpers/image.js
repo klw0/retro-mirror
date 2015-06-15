@@ -15,15 +15,15 @@ function randomInt(min, max) {
  * Quantizes an image to a given palette.
  */
 export function quantize(rawImageData, palette) {
-    var newImageData = new ImageData(rawImageData.width, rawImageData.height);
+    let newImageData = new ImageData(rawImageData.width, rawImageData.height);
 
-    var originalImageProcessor = new ImageProcessor(rawImageData);
-    var quantizedImageProcessor = new ImageProcessor(newImageData);
+    let originalImageProcessor = new ImageProcessor(rawImageData);
+    let quantizedImageProcessor = new ImageProcessor(newImageData);
 
     for (let x = 0; x < rawImageData.width; x++) {
         for (let y = 0; y < rawImageData.height; y++) {
-            var color = originalImageProcessor.getPixel(x, y);
-            var nearestColor = colorHelper.nearestColor(color, palette);
+            let color = originalImageProcessor.getPixel(x, y);
+            let nearestColor = colorHelper.nearestColor(color, palette);
             quantizedImageProcessor.setPixel(x, y, nearestColor);
         }
     }
@@ -35,28 +35,28 @@ export function quantize(rawImageData, palette) {
  * Glitches/corrupts the image data.
  */
 export function glitch(imageData) {
-    var mediaType = 'image/jpeg';
-    var dataUriScheme = `data:${mediaType};base64,`;
+    let mediaType = 'image/jpeg';
+    let dataUriScheme = `data:${mediaType};base64,`;
 
-    var canvas = document.createElement('canvas');
+    let canvas = document.createElement('canvas');
     canvas.width = imageData.width;
     canvas.height = imageData.height;
 
-    var ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d');
     ctx.putImageData(imageData, 0, 0);
 
     // Get the image data as a JPEG data URI and convert it to a byte array.
-    var encodedData = canvas.toDataURL(mediaType, 0.8).replace(dataUriScheme, '');
-    var byteArray = dataHelper.base64ToByteArray(encodedData);
+    let encodedData = canvas.toDataURL(mediaType, 0.8).replace(dataUriScheme, '');
+    let byteArray = dataHelper.base64ToByteArray(encodedData);
 
     // Find the beginning of the JPEG scan data.
-    var jpegDataStartIndex = 0;
-    var jpegDataEndIndex = byteArray.length - 2;    // Last two bytes are the End of Image (EOI) marker.
+    let jpegDataStartIndex = 0;
+    let jpegDataEndIndex = byteArray.length - 2;    // Last two bytes are the End of Image (EOI) marker.
     for (let i = 0; i < byteArray.length; i++) {
         // If we found the Start of Scan (SOS) marker...
         if (byteArray[i] === 0xFF && byteArray[i + 1] === 0xDA) {
             // The next two bytes contain the SOS header length.
-            var scanHeaderLength = byteArray[i + 2] + byteArray[i + 3];
+            let scanHeaderLength = byteArray[i + 2] + byteArray[i + 3];
             jpegDataStartIndex = i + 2 + scanHeaderLength;  // +2 bytes to account for 0xFFDA.
 
             break;
@@ -68,10 +68,10 @@ export function glitch(imageData) {
         byteArray[randomInt(jpegDataStartIndex, jpegDataEndIndex)] = 0;
     }
 
-    var image = new Image(imageData.width, imageData.height);
+    let image = new Image(imageData.width, imageData.height);
     image.src = dataUriScheme + dataHelper.byteArrayToBase64(byteArray);
     ctx.drawImage(image, 0, 0);
-    var newImageData = ctx.getImageData(0, 0, imageData.width, imageData.height);
+    let newImageData = ctx.getImageData(0, 0, imageData.width, imageData.height);
 
     return newImageData;
 }

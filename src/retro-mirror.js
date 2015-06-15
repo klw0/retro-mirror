@@ -62,7 +62,7 @@ export default class RetroMirror {
      */
     loop() {
         this.bctx.drawImage(this.video, 0, 0, this.buffer.width, this.buffer.height);
-        var imageData = this.bctx.getImageData(0, 0, this.buffer.width, this.buffer.height);
+        let imageData = this.bctx.getImageData(0, 0, this.buffer.width, this.buffer.height);
 
         if (this.palette !== 'none') {
             imageData = imageHelper.quantize(imageData, this.palette);
