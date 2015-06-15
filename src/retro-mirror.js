@@ -7,12 +7,14 @@ const defaults = {
     height: 480,
     pixelSize: 4,
     palette: 'none',
+    isGlitchingEnabled: false,
 };
 
 export default class RetroMirror {
     constructor(canvasId) {
         this._pixelSize = defaults.pixelSize;
         this._palette = defaults.palette;
+        this._isGlitchingEnabled = defaults.isGlitchingEnabled;
 
         this.canvas = document.getElementById(canvasId);
         this.buffer = null;
@@ -66,6 +68,10 @@ export default class RetroMirror {
             imageData = imageHelper.quantize(imageData, this.palette);
         }
 
+        if (this.isGlitchingEnabled) {
+            imageData = imageHelper.glitch(imageData);
+        }
+
         this.bctx.putImageData(imageData, 0, 0);
 
         this.ctx.drawImage(this.buffer, 0, 0, this.canvas.width, this.canvas.height);
@@ -104,5 +110,19 @@ export default class RetroMirror {
      */
     set palette(palette) {
         this._palette = palettes[palette] || defaults.palette;
+    }
+
+    /**
+     * Gets if gitching is enabled.
+     */
+    get isGlitchingEnabled() {
+        return this._isGlitchingEnabled;
+    }
+
+    /**
+     * Sets if glitching should be enabled.
+     */
+    set isGlitchingEnabled(enable) {
+        this._isGlitchingEnabled = enable;
     }
 }

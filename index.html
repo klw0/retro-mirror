@@ -10,6 +10,7 @@
                 var pixelSizeInput = document.querySelector('input[name=pixel-size]');
                 var pixelSizeOutput = document.querySelector('output[name=pixel-size]');
                 var paletteSelect = document.querySelector('select[name=palette]');
+                var glitchCheckbox = document.querySelector('input[name=glitch]');
 
                 pixelSizeInput.value = retroMirror.pixelSize;
                 pixelSizeOutput.value = pixelSizeInput.value;
@@ -21,6 +22,11 @@
                 paletteSelect.value = retroMirror.palette;
                 paletteSelect.addEventListener('change', function() {
                     retroMirror.palette = this.value;
+                });
+
+                glitchCheckbox.checked = retroMirror.isGlitchingEnabled;
+                glitchCheckbox.addEventListener('change', function() {
+                    retroMirror.isGlitchingEnabled = this.checked;
                 });
             });
         </script>
@@ -60,6 +66,10 @@
                     <option value="nes">NES</option>
                     <option value="teletext">Teletext</option>
                 </select>
+            </div>
+
+            <div class="control-group">
+                <input name="glitch" type="checkbox"></input>
             </div>
         </div>
     </body>
