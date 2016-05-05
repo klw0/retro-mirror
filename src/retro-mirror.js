@@ -3,6 +3,7 @@ import * as imageHelper from './helpers/image';
 import * as palettes from './palettes/palettes';
 
 const defaults = {
+    timeStep: 1000 / 60,
     width: 640,
     height: 480,
     pixelSize: 4,
@@ -16,6 +17,8 @@ export default class RetroMirror {
         this._palette = defaults.palette;
         this._isGlitchingEnabled = defaults.isGlitchingEnabled;
 
+        this.dt = 0;
+        this.then = 0;
         this.canvas = document.getElementById(canvasId);
         this.buffer = null;
         this.ctx = null;
@@ -60,7 +63,23 @@ export default class RetroMirror {
     /**
      * Main application loop.
      */
-    loop() {
+    loop(now = 0) {
+        // Reduce the desired FPS when glitching is enabled,
+        // since it has less of an effect when it's running too quickly.
+        let timeStep = this.isGlitchingEnabled ? 1000 / 30 : defaults.timeStep;
+
+        this.dt += now - this.then;
+        this.then = now;
+
+        while (this.dt >= timeStep) {
+            this.draw();
+            this.dt -= timeStep;
+        }
+
+        window.requestAnimationFrame(this.loop.bind(this));
+    }
+
+    draw() {
         this.bctx.drawImage(this.video, 0, 0, this.buffer.width, this.buffer.height);
         let imageData = this.bctx.getImageData(0, 0, this.buffer.width, this.buffer.height);
 
@@ -75,8 +94,6 @@ export default class RetroMirror {
         this.bctx.putImageData(imageData, 0, 0);
 
         this.ctx.drawImage(this.buffer, 0, 0, this.canvas.width, this.canvas.height);
-
-        window.requestAnimationFrame(this.loop.bind(this));
     }
 
     /**
